@@ -1,0 +1,26 @@
+Shop PetStore 
+ 
+Requirements:
+1. Make a db schema(table) called Pets, and insert these values
+Pet        	Cost
+Cat        	40
+Bird       	100
+Fish       	90
+Dog       	50
+2. Create a User Login/Registration page so that the user can be authenticated from the DB. A name and password are the minimum requirements for registration (extra fields can be added, but they will be disregarded by us).
+3. After Login, show a "Pets Selection Page"  (by fetching details from the DB). A user can buy any number of the above-mentioned pets.
+4. Display a Shopping page that will show the above pets and let users select them using a form.
+5. Update the user’s selection in the DB upon form submission. Only the ids of the pets should be stored in the Users DB.
+6. Redirect the user to the "Pets Selection Page".
+7. The details of what the user has selected should be visible in the "Pets Selection Page" the next time he logs in.
+ 
+Note:
+Both the Users and Pets DB have to be separate.
+The UX/UX aspect is not important, please focus on only the working aspect.
+Choose any HTML Input Element to get the users selection.
+If any Design Patterns are used, please mention which ones and why it was used.
+You are free to use the language of your choice.
+ 
+ 
+Feel free to reach to me on atul.agarwal@olx.com or on +91 9810162035 if you need any clarification on any point.
+
