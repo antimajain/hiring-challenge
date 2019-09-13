@@ -19,7 +19,10 @@ Both the Users and Pets DB have to be separate.
 The UX/UX aspect is not important, please focus on only the working aspect.
 Choose any HTML Input Element to get the users selection.
 If any Design Patterns are used, please mention which ones and why it was used.
+Please handle all edge cases.
 You are free to use the language of your choice.
+Unit tests and integration tests would be an added advatage.
+
  
  
 Feel free to reach to me on atul.agarwal@olx.com or on +91 9810162035 if you need any clarification on any point.
