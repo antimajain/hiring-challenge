@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"><head>
+<meta charset="ISO-8859-1">
+<title>Login</title>
+</head>
+<style>
+body {font-family: Arial, Helvetica, sans-serif;
+background-color: #F4F6F6
+}
+* {box-sizing: border-box;}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity:1;
+}
+
+.container {
+  padding: 36px;
+}
+
+.modal {
+	padding: 10%;
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto; 
+  width: 40%; 
+  padding:2%;
+}
+
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+a{
+text-decoration: none;
+}
+
+#note{
+color: red;
+}
+h1{
+padding: 2% 8% 1% 1%;
+color: #4CAF50;
+opacity:0.9;
+font-family: "Comic Sans MS";
+}
+</style>
+<body>
+<h1>Pet Shop</h1>
+<div class="model">
+<form class="modal-content" >
+		<div id="container">
+			<h2>Login</h2>
+			<hr>
+	<label for="username"><b>Username</b></label>
+	<input id="username" type="text"  placeholder="Enter username" required/><br />
+	 <label for="password"><b>Password</b></label>
+	 <input id="password" type="password"  placeholder="Enter Password"required/> <br />
+	  <div class="clearfix">
+	<button type="submit" class="loginbtn" id="submit" onclick="loadDoc()">Submit</button>
+			</div>	 		
+		<p>
+			 <a href="/petstore/register">New Member? Click here to Create Account</a>
+		</p>
+		<div id="node"></div>
+		</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+		function loadDoc() {
+			var data = {
+				"username" : document.getElementById("username").value,
+				"password" : document.getElementById("password").value
+			};
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("POST", "http://localhost:8080/petstore/login", true);
+			xhttp.setRequestHeader("Content-Type", "application/json");
+			xhttp.send(JSON.stringify(data));
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == this.HEADERS_RECEIVED) {
+					var str = xhttp.getResponseHeader("Authorization");
+					if (str !== null) {
+						window.localStorage['header'] = str;
+						location.href = "/petstore/home";
+					} else {
+						addNote("Wrong user Id or Password");
+					}
+				}
+			};
+		}
+		
+		function addNote(v){
+			document.getElementById("node").innerHTML="";
+			var para = document.createElement("p");
+			para.id="note";
+			var node = document.createTextNode(v);
+			para.appendChild(node);
+
+			var element = document.getElementById("node");
+			element.appendChild(para);
+			document.getElementById("psw-repeat").value="";
+		}
+	</script>
+</body>
+</html>

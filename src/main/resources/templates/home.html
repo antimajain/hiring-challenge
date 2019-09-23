@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+<meta charset="ISO-8859-1">
+<title>Pet Selection Page</title>
+<style>
+
+body {font-family: Arial, Helvetica, sans-serif;
+background-color: #F4F6F6;
+}
+
+
+#pets {
+padding: 5% 10% ;
+  font-family: "Comic Sans MS";
+  
+}
+[id|=div] {
+border: 1px solid #F4F6F6;
+margin: 20px 30px;
+width: 160px;
+hight: 60%;
+display:inline-block; 
+background-color: #fff;
+}
+
+[id|=subdiv]{
+padding:3% 5%;
+width:90%;
+height:10%;
+border-collapse: collapse;
+
+}
+input[type=number] {
+  width: 80%;
+  padding: 5px 5px;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+input[type=number]:focus{
+  background-color: #ddd;
+  outline: none;
+}
+button{
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 4px 0 0 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+button:hover {
+  opacity:1;
+}
+h1{
+width: 30%;
+padding: 2% 8% 1% 1%;
+color: #D7BDE2;
+font-family: "Comic Sans MS";
+  opacity: 0.9;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #4CAF50;
+  color: black;
+  opacity:0.9;
+}
+
+
+</style>
+</head>
+<body onload="fun()">
+<h1>Pet Shop</h1>
+
+<div class="topnav">
+<a href="/petstore/home">Home</a>
+<a href="/petstore/cart">My Cart</a>
+<a href="javascript:void(0);" onclick="logout()"> Logout</a>
+</div>
+
+<div id="pets">
+
+
+</div>
+<script type="text/javascript">
+function fun(){
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			var data = JSON.parse(this.response);
+			var l;
+			for(l in data){
+				var div=document.createElement("div");
+				div.id="div-"+data[l].id;
+				var product=document.getElementById("pets");
+				product.appendChild(div);
+				
+				var subdiv=document.createElement("div");
+				subdiv.id="subdiv-"+data[l].id;
+				div.appendChild(subdiv);
+				
+				var petdetails=document.createElement("p");
+				petdetails.id="petd-"+data[l].id;
+				var node = document.createTextNode("Pet Name - "+data[l].petName);
+				petdetails.appendChild(node);
+				subdiv.appendChild(petdetails);
+				
+				var cost=document.createElement("p");
+				cost.id="petd-"+data[l].id;
+				var costnode = document.createTextNode("Cost - "+data[l].cost);
+				cost.appendChild(costnode);
+				subdiv.appendChild(cost);
+				
+				// adding buy option
+			
+			
+					var ip = document.createElement("input");
+					ip.setAttribute('type', "number");
+					ip.setAttribute("placeholder","Enter values")
+					ip.id="input-"+data[l].id;
+					ip.setAttribute('min', 0);
+
+					var cartbutton = document.createElement("button");
+					cartbutton.innerHTML = "Add to cart";
+					cartbutton.id = data[l].id;
+					cartbutton.addEventListener("click", function() {
+
+						addToCart(this.id);
+					});
+
+					subdiv.appendChild(ip);
+					subdiv.appendChild(cartbutton);
+
+				}
+			}
+
+		}
+		xhttp.open("GET", "http://localhost:8080/petstore/homePage", true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.setRequestHeader("Authorization", window.localStorage['header']);
+		xhttp.send();
+	}
+
+	function addToCart(id) {
+		var c=document.getElementById("input-"+id).value;
+		if (c > 0) {
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4) {
+					location.href = "/petstore/cart";
+				}
+			};
+			xhttp.open("POST", "http://localhost:8080/petstore/addPet/" + id
+					+ "?count=" + c, true);
+			xhttp.setRequestHeader("Content-Type", "application/json");
+			xhttp.setRequestHeader("Authorization",
+					window.localStorage['header']);
+			xhttp.send();
+		}
+
+	}
+	function logout(){
+		window.localStorage.clear();
+		location.href = "/petstore/loginForm";
+	}
+	
+</script>
+</body>
+</html>

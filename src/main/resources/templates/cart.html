@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"><head>
+<meta charset="ISO-8859-1">
+<title>Pet Selection Page</title>
+</head>
+
+<style>
+
+body {font-family: Arial, Helvetica, sans-serif;
+background-color: #F4F6F6;
+}
+h1{
+width: 30%;
+padding: 2% 8% 1% 1%;
+color: #D7BDE2;
+font-family: "Comic Sans MS";
+  opacity: 0.9;
+}
+#pets{
+padding: 5% 10% ;
+font-family: "Comic Sans MS";
+}
+
+[id|=div] {
+border: 1px solid #F4F6F6;
+margin: 20px 30px;
+width: 160px;
+hight: 60%;
+display:inline-block; 
+background-color: #fff;
+}
+
+[id|=subdiv]{
+padding:3% 5%;
+width:90%;
+height:10%;
+border-collapse: collapse;
+
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 4px 0 0 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+button:hover {
+  opacity:1;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #4CAF50;
+  color: black;
+  opacity:0.9;
+}
+</style>
+<body onload="fun()">
+<h1>Pet Shop</h1>
+<div class="topnav">
+<a href="/petstore/home">Home</a>
+<a href="/petstore/cart">My Cart</a>
+<a href="javascript:void(0);" onclick="logout()"> Logout</a>
+</div>
+<div id="pets">
+</div>
+<script type="text/javascript">
+function fun(){
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4) {
+			var data = JSON.parse(this.response);
+			var l;
+			if(data.length>0){
+			for(l in data){
+				var div=document.createElement("div");
+				div.id="div-"+data[l].id;
+				var product=document.getElementById("pets");
+				product.appendChild(div);
+				
+				var subdiv=document.createElement("div");
+				subdiv.id="subdiv-"+data[l].id;
+				div.appendChild(subdiv);
+				
+				var petdetails=document.createElement("p");
+				petdetails.id="petd-"+data[l].id;
+				var node = document.createTextNode("Pet Name - "+data[l].product);
+				petdetails.appendChild(node);
+				subdiv.appendChild(petdetails);
+				
+				var cost=document.createElement("p");
+				cost.id="petd-"+data[l].id;
+				var costnode = document.createTextNode("Cost - "+data[l].cost);
+				cost.appendChild(costnode);
+				subdiv.appendChild(cost);
+				
+				var count=document.createElement("p");
+				count.id="petd-"+data[l].id;
+				var countnode = document.createTextNode("Count - "+data[l].count);
+				count.appendChild(countnode);
+				subdiv.appendChild(count);
+				
+				var removebutton = document.createElement("button");
+				removebutton.innerHTML = "Remove";
+				removebutton.id = data[l].id;
+				removebutton.addEventListener("click", function() {
+
+					RemoveFromCart(this.id);
+				});
+				subdiv.appendChild(removebutton);
+				
+				}
+			}
+			else{
+				document.getElementById("pets").innerHTML="Your Cart is Empty.";
+			}
+			}
+
+		}
+		xhttp.open("GET", "http://localhost:8080/petstore/cartDisplay", true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.setRequestHeader("Authorization", window.localStorage['header']);
+		xhttp.send();
+	}
+	
+function RemoveFromCart(id) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4) {
+				location.href = "/petstore/cart";
+			}
+		};
+		xhttp.open("POST", "http://localhost:8080/petstore/removePet/" + id
+				, true);
+		xhttp.setRequestHeader("Content-Type", "application/json");
+		xhttp.setRequestHeader("Authorization",
+				window.localStorage['header']);
+		xhttp.send();
+	
+
+}
+function logout(){
+	window.localStorage.clear();
+	location.href = "/petstore/loginForm";
+}
+
+
+</script>
+</body>
+</html>
